@@ -1,0 +1,34 @@
+{
+  "version": "0.0.1-alpha",
+  "description": "HTML event based user behavior collector",
+  "keywords": [
+    "tag",
+    "event",
+    "manager",
+    "client"
+  ],
+  "homepage": "https://github.com/gegurakzi/TagManager",
+  "bugs": {
+    "url": "https://github.com/gegurakzi/TagManager/issues",
+    "email": "xogmldntmd@gmail.com"
+  },
+  "license": "MIT",
+  "author": "Malachai Lee <xogmldntmd@gmail.com> (https://malachai.tistory.com)",
+  "contributors": [],
+  "main": "dist/tagmanager.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gegurakzi/TagManager.git"
+  },
+  "files": [
+    "dist",
+    "!dist/test"
+  ],
+  "engines": {
+    "node": ">=18.15.0"
+  },
+  "name": "react-tag-manager",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
