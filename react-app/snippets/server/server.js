@@ -19,7 +19,7 @@ let controller = compose([
 
 let server = http.createServer(controller);
 
-server.listen(8080, function(){
+server.listen(8000, function(){
     console.log('Server is running...');
 });
 

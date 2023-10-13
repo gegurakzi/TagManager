@@ -8,7 +8,7 @@ const ReactTagManager = {
         let snippet = document.createElement('script');
         snippet.type= 'text/javascript';
         snippet.async = true;
-        snippet.src = 'http://localhost:8080/'+id+'/snippet.js';
+        snippet.src = 'http://localhost:8000/'+id+'/snippet.js';
         snippet.onload = function (){
             if(typeof snippetInit == "function") {
                 // eslint-disable-next-line no-undef

@@ -1,12 +1,16 @@
 const TagManager = {
     initialize() {
         window.tagmanager = {};
+        window.sessionStorage.setItem("TAGMANAGER_SESSION_ID", window.sessionStorage.getItem("TAGMANAGER_SESSION_ID")|| crypto.randomUUID());
         ////////////////////////////////////////////
         window.tagmanager.config = {
             handles: {
                 click_random: {
                     "name": "click_random",
                     "base": "click",
+                    "paths": [
+                        {"name": "article", "index": 1}
+                    ],
                     "datas": ["random", "userId"]
                 },
                 login: {
@@ -14,7 +18,7 @@ const TagManager = {
                     "base": "click",
                     "params": [],
                     "paths": [
-                        {"pathName": "userId", "pathIndex": 2}
+                        {"name": "userId", "index": 2}
                     ],
                     "datas": ["random"]
                 }, // param: 쿼리스트링으로 전달되는 데이터, path: path로 전달되는 데이터의 인덱스
@@ -22,10 +26,10 @@ const TagManager = {
                     "name": "purchase",
                     "base": "click",
                     "params": [
-                        {"pathName": "productName", "pathIndex": "product"}
+                        {"name": "productName", "index": "product"}
                     ],
                     "paths": [
-                        {"pathName": "productId", "pathIndex": 3}
+                        {"name": "productId", "index": 3}
                     ],
                     "datas": ["random"]
                 }
@@ -77,9 +81,27 @@ const TagManager = {
 
     start() {
         window.dataTray.document = window.dataTray.document || {};
+        //////////// 수집할 문서 정보
         window.dataTray.document.title = document.title;
         window.dataTray.document.location = document.location.href;
-        window.dataTray.document.referrer = window.dataTray.document.prevLocation || document.referrer;
+        window.dataTray.document.referrer = window.tagmanager.prevLocation || document.referrer;
+        window.dataTray.document.screenDevice = (window.innerWidth >= 1024) ? "desktop" : (window.innerWidth >= 768) ? "tablet" : "phone";
+        window.dataTray.document.userLanguage = window.navigator.language.substring(0, 2);
+        window.dataTray.document.userAgent = (() => {
+            let userAgent = window.navigator.userAgent.toLowerCase()
+            if (userAgent.indexOf('edge') > -1) {
+                return 'edge';
+            } else if (userAgent.indexOf('whale') > -1) {
+                return 'whale';
+            } else if (userAgent.indexOf('chrome') > -1) {
+                return 'chrome';
+            } else if (userAgent.indexOf('firefox') > -1) {
+                return 'firefox';
+            } else {
+                return 'explorer';
+            }
+        })();
+        ////////////
 
         const tags = window.tagmanager.config.tags;
         const handles = window.tagmanager.config.handles;
@@ -153,7 +175,8 @@ const TagManager = {
     },
 
     stop() {
-        window.dataTray.document.prevLocation = window.dataTray.document.location;
+        this.dump();
+        window.tagmanager.prevLocation = window.dataTray.document.location;
         for(let i=0; i<this.openedListeners.length; i++) {
             this.openedListeners[i].target.removeEventListener(this.openedListeners[i].type, this.openedListeners[i].listener);
         }
@@ -195,18 +218,26 @@ const TagManager = {
     },
 
     fill(event, type) {
-        window.tagmanager.logs.push(event);
+        window.tagmanager.logs.push(JSON.stringify({
+            detail: event.detail,
+            type: type,
+            timeStamp: event.timeStamp
+        }));
         console.log(event)
     },
 
     dump() {
         const end = window.tagmanager.logs.length;
-        fetch("http://localhost:8080/dump", {
+        fetch("http://localhost:8080/api/v1/dump", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(window.tagmanager.logs.slice(0, end))
+            body: JSON.stringify({
+                sessionId: window.sessionStorage.getItem("TAGMANAGER_SESSION_ID"),
+                document: window.dataTray.document,
+                logs: window.tagmanager.logs.slice(0, end)
+            })
         });
         window.tagmanager.logs = window.tagmanager.logs.slice(end);
     }
