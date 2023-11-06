@@ -1,65 +1,5 @@
 const TagManager = {
     initialize() {
-        window.tagmanager = {};
-        window.sessionStorage.setItem("TAGMANAGER_SESSION_ID", window.sessionStorage.getItem("TAGMANAGER_SESSION_ID")|| crypto.randomUUID());
-        ////////////////////////////////////////////
-        window.tagmanager.config = {
-            handles: {
-                click_random: {
-                    "name": "click_random",
-                    "base": "click",
-                    "paths": [
-                        {"name": "article", "index": 1}
-                    ],
-                    "datas": ["random", "userId"]
-                },
-                login: {
-                    "name": "login",
-                    "base": "click",
-                    "params": [],
-                    "paths": [
-                        {"name": "userId", "index": 2}
-                    ],
-                    "datas": ["random"]
-                }, // param: 쿼리스트링으로 전달되는 데이터, path: path로 전달되는 데이터의 인덱스
-                purchase: {
-                    "name": "purchase",
-                    "base": "click",
-                    "params": [
-                        {"name": "productName", "index": "product"}
-                    ],
-                    "paths": [
-                        {"name": "productId", "index": 3}
-                    ],
-                    "datas": ["random"]
-                }
-            },
-            tags: [
-                {
-                    "name": "button1",
-                    "id": "button",
-                    "class": "",
-                    "events": ["click", "login"]
-                },
-                {
-                    "name": "button2",
-                    "id": "button2",
-                    "class": "primary",
-                    "events": ["purchase"]
-                },
-                {
-                    "name": "random_num",
-                    "events": ["click_random"]
-                },
-                {
-                    "name": "App-link",
-                    "id": "",
-                    "class": "App-link",
-                    "events": ["mouseenter"]
-                },
-            ]
-        };
-        ////////////////////////////////////////////
         window.tagmanager.config.handles["load"] = { "name": "load" };
         window.tagmanager.config.handles["beforeunload"] = { "name": "beforeunload" };
         window.tagmanager.config.handles["click"] = { "name": "click" };
@@ -75,7 +15,6 @@ const TagManager = {
             "name": "root",
             "events": ["pageenter"]
         });
-
         this.openedListeners = [];
     },
 
@@ -235,6 +174,7 @@ const TagManager = {
             },
             body: JSON.stringify({
                 sessionId: window.sessionStorage.getItem("TAGMANAGER_SESSION_ID"),
+                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 document: window.dataTray.document,
                 logs: window.tagmanager.logs.slice(0, end)
             })
@@ -243,8 +183,66 @@ const TagManager = {
     }
 }
 
-function snippetInit() {
-    console.log("snippet init");
+function snippetInit(id) {
+    window.tagmanager = {};
+    window.sessionStorage.setItem("TAGMANAGER_SESSION_ID", window.sessionStorage.getItem("TAGMANAGER_SESSION_ID")|| crypto.randomUUID());
+    ////////////////////////////////////////////
+    window.tagmanager.config = {
+        handles: {
+            click_random: {
+                "name": "click_random",
+                "base": "click",
+                "paths": [
+                    {"name": "article", "index": 1}
+                ],
+                "datas": ["random", "userId"]
+            },
+            login: {
+                "name": "login",
+                "base": "click",
+                "params": [],
+                "paths": [
+                    {"name": "userId", "index": 2}
+                ],
+                "datas": ["random"]
+            }, // param: 쿼리스트링으로 전달되는 데이터, path: path로 전달되는 데이터의 인덱스
+            purchase: {
+                "name": "purchase",
+                "base": "click",
+                "params": [
+                    {"name": "productName", "index": "product"}
+                ],
+                "paths": [
+                    {"name": "productId", "index": 3}
+                ],
+                "datas": ["random"]
+            }
+        },
+        tags: [
+            {
+                "name": "button1",
+                "id": "button",
+                "class": "",
+                "events": ["click", "login"]
+            },
+            {
+                "name": "button2",
+                "id": "button2",
+                "class": "primary",
+                "events": ["purchase"]
+            },
+            {
+                "name": "random_num",
+                "events": ["click_random"]
+            },
+            {
+                "name": "App-link",
+                "id": "",
+                "class": "App-link",
+                "events": ["mouseenter"]
+            },
+        ]
+    };
     TagManager.initialize();
 }
 
@@ -257,3 +255,4 @@ function snippetStop() {
     console.log("snippet stop");
     TagManager.stop();
 }
+

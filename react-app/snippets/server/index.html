@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+            name="description"
+            content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Plain HTML App</title>
+</head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+
+<div id="root"></div>
+    <div class="App">
+        <header class="App-header">
+            <img src="../../src/logo.svg" class="App-logo" alt="logo">
+            <h3 class="App-link">Explore</h3>
+            <a class="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">Learn React</a>
+            <a href="http://localhost:3000/explore">explore</a>
+        </header>
+    </div>
+<script src="http://localhost:8000/TM-KOR12/snippet.js"></script>
+<script>
+    window.dataTray = window.dataTray || {};
+    snippetInit("TM-KOR12");
+    snippetStart();
+</script>
+</body>
+</html>

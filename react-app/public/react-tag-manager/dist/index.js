@@ -12,7 +12,7 @@ const ReactTagManager = {
         snippet.onload = function (){
             if(typeof snippetInit == "function") {
                 // eslint-disable-next-line no-undef
-                snippetInit();
+                snippetInit(id);
                 // eslint-disable-next-line no-undef
                 snippetStart();
             }

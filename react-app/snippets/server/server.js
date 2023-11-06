@@ -2,6 +2,7 @@ let http = require('http');
 
 let fs = require('fs');
 let script = fs.readFileSync('../snippet.js', 'utf-8');
+let html = fs.readFileSync('./index.html', 'utf-8');
 
 let getJs = function(request,response){
     setTimeout(() => {
@@ -13,8 +14,19 @@ let getJs = function(request,response){
     }, 2000);
 }
 
+let getHtml = function(request,response){
+    setTimeout(() => {
+
+        response.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+        response.write(html);
+        response.end();
+
+    }, 2000);
+}
+
 let controller = compose([
     wrapHandler('/TM-KOR12/snippet.js', getJs),
+    wrapHandler('/', getHtml),
 ]);
 
 let server = http.createServer(controller);
